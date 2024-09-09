@@ -1,4 +1,5 @@
 import random
+import json
 
 # Function to load words from a file
 def load_words_from_file(filename):
@@ -70,16 +71,26 @@ def generate_password(adjectives, nouns):
     
     return password
 
-# Main function
-def main():
-    # Load adjectives and nouns from files
-    adjectives = load_words_from_file('adjectives.txt')
-    nouns = load_words_from_file('nouns.txt')
+def lambda_handler(event, context):
+    # Load adjectives and nouns from files in the Lambda working directory
+    adjectives = load_words_from_file('/var/task/adjectives.txt')
+    nouns = load_words_from_file('/var/task/nouns.txt')
     
-    # Generate and print the password
+    # Generate the password
     password = generate_password(adjectives, nouns)
-    print(f"Generated Password: {password}")
-
-# Entry point of the script
-if __name__ == "__main__":
-    main()
+    
+    # Prepare the response for API Gateway
+    response = {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": {
+            "password": password
+        }
+    }
+    
+    # API Gateway requires the body to be a string, so we serialize the body dictionary to JSON
+    response["body"] = json.dumps(response["body"])
+    
+    return response

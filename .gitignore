@@ -101,3 +101,6 @@ terraform.rc
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,osx,linux,terraform
+
+# We're generating a zip file, let's just ignore all of them -- it's bad to store binaries in git anyway
+*.zip
