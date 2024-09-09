@@ -15,7 +15,10 @@ output "certification_status" {
 
 output "dns_records" {
   value = {
-    name = "password.ricky-dev.com"
-    value = aws_api_gateway_domain_name.custom_domain[0].cloudfront_domain_name
+    "password.ricky-dev.com" : {
+      name  = "password.ricky-dev.com"
+      type  = "CNAME"
+      value = aws_api_gateway_domain_name.custom_domain[0].cloudfront_domain_name
+    }
   }
 }
