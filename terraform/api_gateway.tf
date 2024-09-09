@@ -41,4 +41,12 @@ resource "aws_api_gateway_deployment" "my_api_deployment" {
   depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   stage_name  = "prod"
+
+  triggers = {
+    redeployment = sha1(jsonencode({
+      resources = aws_api_gateway_rest_api.my_api.id
+      methods   = aws_api_gateway_method.get_root.http_method
+      integrations = aws_api_gateway_integration.lambda_integration_root.uri
+    }))
+  }
 }
